@@ -62,24 +62,24 @@ curl -XGET localhost:8080/mastermind/historic
 ```sh
 curl -XPOST localhost:8080/mastermind/create
 ```
-> {"Response": "New game created"}
+> {"response": "New game created"}
 
 ```sh
 curl -XPUT localhost:8080/mastermind/guess -d 'RED RED RED RED'
 ```
-> {"Response": ["BLACK"]}
+> {"response": ["BLACK"]}
 
 ```sh
 curl -XPUT localhost:8080/mastermind/guess -d 'BLUE BLUE BLUE BLUE'
 ```
-> {"Response": []}
+> {"response": []}
 
 
 ```sh
 curl -XGET localhost:8080/mastermind/historic
 ```
 
-> {"Response": [
+> {"response": [
     {"output": ["BLACK"], "guess": ["RED", "RED", "RED", "RED"]},
     {"output": [], "guess": ["BLUE", "BLUE", "BLUE", "BLUE"]}
     ]}
@@ -89,4 +89,4 @@ curl -XGET localhost:8080/mastermind/historic
 ```sh
 curl -XPUT localhost:8080/mastermind/guess -d 'RED GREEN YELLOW YELLOW'
 ```
-> {"Response": "You win!"}
+> {"response": "You win!"}
