@@ -10,7 +10,7 @@ codemaker = Codemaker()
 @app.route("/create", methods=["POST"])
 def create_game():
     codemaker.create_game()
-    return response({"msg": "Game Created"}, 200)
+    return response("Game Created", 200)
 
 
 @app.route("/guess", methods=["PUT"])
@@ -32,7 +32,7 @@ def is_valid_guess(data):
 
 
 def response(data, status_code):
-    return json.dumps({"msg": data}), status_code
+    return json.dumps({"response": data}), status_code
 
 
 if __name__ == "__main__":
