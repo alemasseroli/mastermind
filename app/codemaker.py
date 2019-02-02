@@ -3,12 +3,11 @@ import random
 
 
 class Codemaker:
-    COLORS = ['RED', 'BLUE', 'GREEN', 'YELLOW']
     code = None
 
-    def create_game(self):
+    def create_game(self, board):
         # sample colors allowing duplicates.
-        self.code = [random.sample(self.COLORS, 1)[0] for _ in range(0, 4)]
+        self.code = [random.sample(board.colors, 1)[0] for _ in range(0, board.holes)]
 
     def evaluate_guess(self, guess):
         output = []
