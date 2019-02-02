@@ -19,20 +19,27 @@ attempts = 0
 started = False
 
 
-@app.route("/create", methods=["POST"])
+@app.route("/mastermind/create", methods=["POST"])
 def create_game():
     global started
     started = True
     codemaker.create_game(board)
-    return response("Game Created", 200)
+    return response("New game created")
 
 
-@app.route("/guess", methods=["PUT"])
+@app.route("/mastermind/historic", methods=["GET"])
+def historic():
+    if not started:
+        return error("Game not created.")
+    return response(board.historic())
+
+
+@app.route("/mastermind/guess", methods=["PUT"])
 def guess():
     global started, attempts
     try:
         if not started:
-            return response("Game not created.", 400)
+            return error("Game not created.")
 
         guess = json.loads(request.get_data().upper())
 
@@ -46,19 +53,23 @@ def guess():
             output = codemaker.evaluate_guess(guess)
             board.add_play(guess, output)
 
-            return response(output, 200)
+            return response(output)
         else:
-            return response("Invalid guess", 400)
+            return error("Invalid guess")
     except:
-        return response("Internal Error", 400)
+        return error("Internal error", 500)
 
 
 def is_valid_guess(data):
     return isinstance(data, list) and len(data) == HOLES
 
 
-def response(data, status_code):
-    return json.dumps({"response": data}), status_code
+def response(data):
+    return json.dumps({"response": data}), 200
+
+
+def error(data, status_code=400):
+    return json.dumps({"msg": data}), status_code
 
 
 if __name__ == "__main__":
