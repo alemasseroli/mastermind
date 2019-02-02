@@ -43,13 +43,12 @@ def guess():
         if not started:
             return error("Game not created.")
 
-        guess = json.loads(request.get_data().upper())
-
+        guess = parse_guess(request)
         if is_valid_guess(guess):
             output = codemaker.evaluate_guess(guess)
             board.add_play(guess, output)
 
-            if output == ['BLACK', 'BLACK', 'BLACK', 'BLACK']:
+            if game_won(output):
                 end_game()
                 return response("You win!")
             else:
@@ -64,6 +63,14 @@ def guess():
             return error("Invalid guess")
     except:
         return error("Internal error", 500)
+
+
+def parse_guess(request):
+    return request.get_data().upper().split(" ")
+
+
+def game_won(output):
+    return output == ['BLACK', 'BLACK', 'BLACK', 'BLACK']
 
 
 def end_game():

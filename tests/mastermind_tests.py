@@ -19,7 +19,7 @@ class MastermindTests(unittest.TestCase):
         mastermind.app.codemaker.code = ['RED', 'RED', 'RED', 'RED']
         response = self.app.put(
             '/mastermind/guess',
-            data=json.dumps(['RED', 'BLUE', 'BLUE', 'BLUE'])
+            data='RED BLUE BLUE BLUE'
         )
         assert response.status_code == 200
         data = json.loads(response.data)
@@ -32,7 +32,7 @@ class MastermindTests(unittest.TestCase):
         mastermind.app.codemaker.code = code
         response = self.app.put(
             '/mastermind/guess',
-            data=json.dumps(code)
+            data=' '.join(code)
         )
         assert response.status_code == 200
         assert 'You win!' in response.data
@@ -44,17 +44,16 @@ class MastermindTests(unittest.TestCase):
         for _ in range(mastermind.app.MAX_ATTEMPTS + 1):
             response = self.app.put(
                 '/mastermind/guess',
-                data=json.dumps(['RED', 'RED', 'RED', 'RED'])
+                data='RED RED RED RED'
             )
         assert response.status_code == 200
         assert 'You lose' in response.data
 
     def test_guess_for_not_started_game_should_fail(self):
         mastermind.app.started = False
-        code = ['RED', 'RED', 'RED', 'RED']
         response = self.app.put(
             '/mastermind/guess',
-            data=json.dumps(code)
+            data='RED RED RED RED'
         )
         assert response.status_code == 400
         assert 'Game not created' in response.data
@@ -63,7 +62,7 @@ class MastermindTests(unittest.TestCase):
         self.app.post('/mastermind/create')
         response = self.app.put(
             '/mastermind/guess',
-            data=json.dumps(['RED', 'RED'])
+            data='RED RED'
         )
         assert response.status_code == 400
         assert 'Invalid guess' in response.data
@@ -85,8 +84,8 @@ class MastermindTests(unittest.TestCase):
     def test_get_historic_for_played_game(self):
         self.app.post('/mastermind/create')
         mastermind.app.codemaker.code = ['BLUE', 'BLUE', 'BLUE', 'BLUE']
-        self.app.put('/mastermind/guess', data=json.dumps(['RED', 'RED', 'RED', 'RED']))
-        self.app.put('/mastermind/guess', data=json.dumps(['BLUE', 'RED', 'RED', 'RED']))
+        self.app.put('/mastermind/guess', data='RED RED RED RED')
+        self.app.put('/mastermind/guess', data='BLUE RED RED RED')
         response = self.app.get('/mastermind/historic')
         assert response.status_code == 200
         data = json.loads(response.data)
