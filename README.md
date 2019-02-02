@@ -87,6 +87,6 @@ curl -XGET localhost:8080/mastermind/historic
 ...
 
 ```sh
-curl -XPUT localhost:8080/mastermind/guess -d 'RED GREEN RED YELLOW'
+curl -XPUT localhost:8080/mastermind/guess -d 'RED GREEN YELLOW YELLOW'
 ```
 > {"Response": "You win!"}
