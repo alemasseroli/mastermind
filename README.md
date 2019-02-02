@@ -25,6 +25,7 @@ pip install -r requirements.txt
 ```
 
 ## Running the tests
+
 ```sh
 python -m tests.codemaker_tests
 python -m tests.mastermind_tests
