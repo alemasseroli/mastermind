@@ -25,7 +25,7 @@ def create_game():
     attempts = 0
     started = True
     board = Board(colors=COLORS, holes=HOLES)
-    codemaker.create_game(board)
+    codemaker.create_code(board)
     return response("New game created")
 
 
@@ -34,11 +34,6 @@ def historic():
     if not started:
         return error("Game not created.")
     return response(board.historic())
-
-
-def end_game():
-    global started
-    started = False
 
 
 @app.route("/mastermind/guess", methods=["PUT"])
@@ -69,6 +64,11 @@ def guess():
             return error("Invalid guess")
     except:
         return error("Internal error", 500)
+
+
+def end_game():
+    global started
+    started = False
 
 
 def is_valid_guess(data):
