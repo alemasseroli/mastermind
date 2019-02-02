@@ -1,6 +1,6 @@
 # Mastermind
 
-Simple web application for playing Mastermind.
+Simple API for playing Mastermind.
 
 ## Getting ready
 
