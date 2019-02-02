@@ -1,8 +1,9 @@
 import json
 
+from flask import Flask, request
+
 from board import Board
 from codemaker import Codemaker
-from flask import Flask, request
 
 app = Flask(__name__)
 
@@ -33,15 +34,18 @@ def guess():
         if not started:
             return response("Game not created.", 400)
 
-        data = json.loads(request.get_data().upper())
-        if is_valid_guess(data):
+        guess = json.loads(request.get_data().upper())
+
+        if is_valid_guess(guess):
             if attempts < MAX_ATTEMPTS:
                 attempts += 1
             else:
                 attempts = 0
                 started = False
 
-            output = codemaker.evaluate_guess(data)
+            output = codemaker.evaluate_guess(guess)
+            board.add_play(guess, output)
+
             return response(output, 200)
         else:
             return response("Invalid guess", 400)
