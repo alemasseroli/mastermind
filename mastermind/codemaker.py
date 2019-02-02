@@ -26,5 +26,6 @@ class Codemaker:
         for peg in no_hit:
             if peg in not_guessed:
                 output.append('WHITE')
+                not_guessed.remove(peg)
 
         return output

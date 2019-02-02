@@ -45,6 +45,13 @@ class CodemakerTests(unittest.TestCase):
             expected=['BLACK', 'BLACK', 'BLACK']
         )
 
+    def test_evaluate_with_disordered_guesses_and_repetitions(self):
+        self.assert_evaluate_output(
+            code=['PINK', 'YELLOW', 'PINK', 'BLUE'],
+            guess=['PINK', 'PINK', 'YELLOW', 'YELLOW'],
+            expected=['BLACK', 'WHITE', 'WHITE']
+        )
+
     def assert_evaluate_output(self, code, guess, expected):
         codemaker = Codemaker()
         codemaker.code = code
