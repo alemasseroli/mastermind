@@ -83,11 +83,11 @@ def is_valid_guess(data):
 
 
 def response(data):
-    return json.dumps({"response": data}), 200
+    return json.dumps({"Response": data}), 200
 
 
 def error(data, status_code=400):
-    return json.dumps({"msg": data}), status_code
+    return json.dumps({"Msg": data}), status_code
 
 
 if __name__ == "__main__":
