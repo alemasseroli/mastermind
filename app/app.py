@@ -12,8 +12,8 @@ HOLES = 4
 COLORS = ['RED', 'BLUE', 'GREEN', 'YELLOW', 'ORANGE', 'PINK']
 MAX_ATTEMPTS = 12
 
+board = None
 codemaker = Codemaker()
-board = Board(HOLES, COLORS)
 
 attempts = 0
 started = False
@@ -21,8 +21,10 @@ started = False
 
 @app.route("/mastermind/create", methods=["POST"])
 def create_game():
-    global started
+    global started, attempts, board
+    attempts = 0
     started = True
+    board = Board(colors=COLORS, holes=HOLES)
     codemaker.create_game(board)
     return response("New game created")
 
@@ -32,6 +34,11 @@ def historic():
     if not started:
         return error("Game not created.")
     return response(board.historic())
+
+
+def end_game():
+    global started
+    started = False
 
 
 @app.route("/mastermind/guess", methods=["PUT"])
@@ -44,14 +51,18 @@ def guess():
         guess = json.loads(request.get_data().upper())
 
         if is_valid_guess(guess):
-            if attempts < MAX_ATTEMPTS:
-                attempts += 1
-            else:
-                attempts = 0
-                started = False
-
             output = codemaker.evaluate_guess(guess)
             board.add_play(guess, output)
+
+            if output == ['BLACK', 'BLACK', 'BLACK', 'BLACK']:
+                end_game()
+                return response("You win!")
+            else:
+                if attempts < MAX_ATTEMPTS:
+                    attempts += 1
+                else:
+                    end_game()
+                    return response("You lose.")
 
             return response(output)
         else:
